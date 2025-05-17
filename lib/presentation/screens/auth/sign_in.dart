@@ -23,85 +23,98 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Row(
-        children: [
-          Image.asset(
-            width: MediaQuery.of(context).size.width*0.6,
-            height: double.infinity,
-            'assets/route.png',
-            fit: BoxFit.cover,
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isDesktop = constraints.maxWidth >= 1000;
 
-          Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(32),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Hello Again!',
-                        style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Welcome Back',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(height: 32),
-                      CustomTextFormField(
-                        label: 'Email',
-                        hintText: 'Enter your email',
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
-                        obscureText: false,
-                        prefixIcon: Icons.email,
-                      ),
-                      const SizedBox(height: 20),
+        Widget sideImage({double? height}) => Image.asset(
+          'assets/route.png',
+          width: isDesktop ? constraints.maxWidth * 0.5 : double.infinity,
+          height: height ?? double.infinity,
+          fit: BoxFit.cover,
+        );
 
-                      CustomTextFormField(
-                        label: 'Password',
-                        hintText: 'Enter your password',
-                        controller: _passwordController,
-                        obscureText: _obscure,
-                        prefixIcon: Icons.lock,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscure ? Icons.visibility_off : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscure = !_obscure;
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-
-                      // Sign in button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-
-                            }
-                          },
-                          child: const Text('Sign In'),
-                        ),
-                      ),
-                    ],
+        Widget signInForm() => Center(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(isDesktop ? 64 : 24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Hello Again!',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Welcome Back',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 32),
+                  CustomTextFormField(
+                    label: 'Email',
+                    hintText: 'Enter your email',
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _emailController,
+                    obscureText: false,
+                    prefixIcon: Icons.email,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextFormField(
+                    label: 'Password',
+                    hintText: 'Enter your password',
+                    controller: _passwordController,
+                    obscureText: _obscure,
+                    prefixIcon: Icons.lock,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscure ? Icons.visibility_off : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscure = !_obscure;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          // Handle sign in
+                        }
+                      },
+                      child: const Text('Sign In'),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        );
+
+        return Scaffold(
+          body: isDesktop
+              ? Row(
+            children: [
+              sideImage(),
+              Expanded(child: signInForm()),
+            ],
+          )
+              : SingleChildScrollView(
+            child: Column(
+              children: [
+                sideImage(height: 250),
+                signInForm(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
