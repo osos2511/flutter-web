@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'core/routes_manager.dart';
+import 'injection_container.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupGetIt();
   runApp(const MyApp());
 }
 

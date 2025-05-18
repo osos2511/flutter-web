@@ -2,8 +2,8 @@ import 'package:flutter_web/data/models/signIn/User_model.dart';
 //step-1-p1
 class SignInResponse {
   SignInResponse({
-      this.message, 
-      this.token, 
+      this.message,
+      this.token,
       this.user,});
 
   SignInResponse.fromJson(dynamic json) {

@@ -21,9 +21,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           'password': password,
         },
       );
+      print('API RESPONSE DATA: ${response.data}');
       return SignInResponse.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['message'] ?? 'Login failed');
-    }
+      print('Dio Error Response: ${e.response?.data}');
+      final errorMessage = e.response?.data['message']?.toString() ?? 'Login failed';
+      throw Exception(errorMessage);    }
   }
 }
